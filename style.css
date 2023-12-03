@@ -1,67 +1,116 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'poppins', sans-serif;
+  outline: none;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
-h2 {
-  color: #333;
-}
-
-form {
+main {
+  max-width: 550px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  max-width: 300px;
-  margin-bottom: 20px;
+  align-items: center;
 }
 
-label {
-  margin-bottom: 8px;
+.resume {
+  display: flex;
+  padding: 10px 0;
+  gap: 40px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-input {
-  padding: 8px;
-  margin-bottom: 16px;
+.resume > div {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 5px #0e0e0e;
+  border-radius: 10px;
+  padding: 20px;
+  width: 150px;
 }
 
-button {
-  padding: 10px;
-  background-color: #4CAF50;
+.newItem {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.divDesc, .divType, .divAmount {
+  display: flex;
+  flex-direction: column;
+}
+
+.newItem > button {
+  background-color: #080808;
   color: white;
   border: none;
+  padding: 0 15px;
+  border-radius: 15px;
   cursor: pointer;
+  height: 34px;
 }
 
-.expenses {
-  color: red;
+input, select {
+  padding: 5px;
 }
 
-.income {
-  color: green;
+.divTable {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-#total {
-  max-width: 300px;
+table {
+  width: 98%;
+  padding: 20px 0;
+  border-radius: 5px;
 }
 
-#total h2 {
-  margin-top: 20px;
-  color: #333;
+th {
+  text-align: start;
+  border-bottom: inset;
+  padding-bottom: 5px;
 }
 
-#total-amount {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+i {
+  font-size: 25px;
 }
 
-.expenses, .income {
-  font-weight: bold;
+.bxs-chevron-up-circle {
+  color: #33f008;
 }
 
-.expenses {
-  color: red;
+.bxs-chevron-down-circle {
+  color: #fa1a05;
 }
 
-.income {
-  color: green;
+.columnAction {
+  width: 40px;
+  text-align: center;
+}
+
+.columnAction > button {
+  background: transparent;
+  border: none;
+}
+
+.columnAmount {
+  width: 30%;
+}
+
+.columnType {
+  width: 80px;
+  text-align: center;
 }

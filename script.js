@@ -1,63 +1,95 @@
-const form = document.getElementById('finance-form');
-const descriptionInput = document.getElementById('description');
-const amountInput = document.getElementById('amount');
-const typeInput = document.getElementById('type');
-const transactionList = document.getElementById('transaction-list');
-const totalAmountDisplay = document.getElementById('total-amount');
+const tbody = document.querySelector("tbody");
+const descItem = document.querySelector("#desc");
+const amount = document.querySelector("#amount");
+const type = document.querySelector("#type");
+const btnNew = document.querySelector("#btnNew");
 
-let totalAmount = 0;
+const incomes = document.querySelector(".incomes");
+const expenses = document.querySelector(".expenses");
+const total = document.querySelector(".total");
 
-function addTransaction() {
-  const description = descriptionInput.value;
-  const amount = parseFloat(amountInput.value);
-  const type = typeInput.value;
+let items;
 
-  if (description && !isNaN(amount)) {
-    const listItem = document.createElement('li');
-    listItem.textContent = `${description}: ${type === 'income' ? '+' : '-'} R$${amount.toFixed(2)}`;
-    listItem.classList.add(type === 'income' ? 'income' : 'expenses');
-
-    transactionList.appendChild(listItem);
-
-    // Atualiza o somatório
-    updateTotalAmount(type, amount);
-
-    // Limpa os campos do formulário
-    descriptionInput.value = '';
-    amountInput.value = '';
-  }
-}
-
-function updateTotalAmount(type, amount) {
-  if (type === 'income') {
-    totalAmount += amount;
-  } else {
-    totalAmount -= amount;
+btnNew.onclick = () => {
+  if (descItem.value === "" || amount.value === "" || type.value === "") {
+    return alert("Preencha todos os campos!");
   }
 
-  totalAmountDisplay.textContent = `R$${totalAmount.toFixed(2)}`;
-}
-
-function printReport() {
-  const transactions = Array.from(transactionList.children).map(transaction => transaction.textContent).join('\n');
-
-  // Usando html2canvas para capturar o conteúdo da página como uma imagem
-  html2canvas(document.body).then(canvas => {
-    const pdf = new jsPDF();
-    
-    // Adicionando a imagem do conteúdo da página ao PDF
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, 297);
-
-    // Adicionando o texto das transações abaixo da imagem
-    pdf.text(10, 10, transactions);
-
-    // Abre uma nova janela com o PDF, onde o usuário pode clicar em "Imprimir"
-    const newWindow = window.open();
-    newWindow.document.write('<html><head><title>Relatório</title></head><body>');
-    newWindow.document.write(`<pre>${transactions}</pre>`); // Mostra o texto como referência
-    newWindow.document.write(`<img src="${canvas.toDataURL('image/png')}"/>`); // Mostra a imagem do conteúdo
-    newWindow.document.write('</body></html>');
-    newWindow.document.close();
-    newWindow.print();
+  items.push({
+    desc: descItem.value,
+    amount: Math.abs(amount.value).toFixed(2),
+    type: type.value,
   });
+
+  setItensBD();
+
+  loadItens();
+
+  descItem.value = "";
+  amount.value = "";
+};
+
+function deleteItem(index) {
+  items.splice(index, 1);
+  setItensBD();
+  loadItens();
 }
+
+function insertItem(item, index) {
+  let tr = document.createElement("tr");
+
+  tr.innerHTML = `
+    <td>${item.desc}</td>
+    <td>R$ ${item.amount}</td>
+    <td class="columnType">${
+      item.type === "Entrada"
+        ? '<i class="bx bxs-chevron-up-circle"></i>'
+        : '<i class="bx bxs-chevron-down-circle"></i>'
+    }</td>
+    <td class="columnAction">
+      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
+    </td>
+  `;
+
+  tbody.appendChild(tr);
+}
+
+function loadItens() {
+  items = getItensBD();
+  tbody.innerHTML = "";
+  items.forEach((item, index) => {
+    insertItem(item, index);
+  });
+
+  getTotals();
+}
+
+function getTotals() {
+  const amountIncomes = items
+    .filter((item) => item.type === "Entrada")
+    .map((transaction) => Number(transaction.amount));
+
+  const amountExpenses = items
+    .filter((item) => item.type === "Saída")
+    .map((transaction) => Number(transaction.amount));
+
+  const totalIncomes = amountIncomes
+    .reduce((acc, cur) => acc + cur, 0)
+    .toFixed(2);
+
+  const totalExpenses = Math.abs(
+    amountExpenses.reduce((acc, cur) => acc + cur, 0)
+  ).toFixed(2);
+
+  const totalItems = (totalIncomes - totalExpenses).toFixed(2);
+
+  incomes.innerHTML = totalIncomes;
+  expenses.innerHTML = totalExpenses;
+  total.innerHTML = totalItems;
+}
+
+const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
+const setItensBD = () =>
+  localStorage.setItem("db_items", JSON.stringify(items));
+
+loadItens();
