@@ -5,14 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle</title>
-
+  <link rel="stylesheet" href="style.css">
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <!-- Adicione a logo aqui -->
+    <img src="img/logo.png" alt="logo.png"style="width: 150px;">
+  </header>
   <main>
+    <button id="btnExport" onclick="exportReport()">Exportar Relatório</button>
     <div class="resume">
       <div>
         Entradas: R$
@@ -58,7 +61,13 @@
         <tbody>
         </tbody>
       </table>
-  </main>  
+  </main>
+  <div id="reportSection" style="display: none;">
+    <h2>Relatório de Despesas e Receitas</h2>
+    <p id="reportContent"></p>
+  </div>
+</main>
+
 
   <script src="script.js"></script>
 </body>

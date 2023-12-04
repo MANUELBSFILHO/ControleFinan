@@ -114,3 +114,18 @@ i {
   width: 80px;
   text-align: center;
 }
+
+#btnExport {
+  background-color: #0c0c0c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#btnExport:hover {
+  background-color: #0056b3;
+}
